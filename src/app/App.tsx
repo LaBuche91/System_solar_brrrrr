@@ -3,6 +3,8 @@ import { SolarSystem } from '../render/components/SolarSystem'
 import { InfoPanel } from '../ui/InfoPanel'
 import { TimeControls } from '../ui/TimeControls'
 import { BodySelector } from '../ui/BodySelector'
+import { KeyboardControls } from '../ui/KeyboardControls'
+import { HelpPanel } from '../ui/HelpPanel'
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
       <InfoPanel />
       <TimeControls />
       <BodySelector />
+      <KeyboardControls />
+      <HelpPanel />
     </div>
   )
 }

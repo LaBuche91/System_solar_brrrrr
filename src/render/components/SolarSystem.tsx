@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { OrbitControls, Stars } from '@react-three/drei'
 import { Planet } from './Planet'
@@ -9,12 +9,14 @@ import { SimpleEphemerisProvider } from '../../ephemeris/kepler.js'
 import { TimeController } from '../../simulation/time.js'
 import { scaleDistance } from '../../utils/math.js'
 import { useSimulationStore } from '../../state/simulation.js'
+import { useCameraFocus } from '../hooks/useCameraFocus.js'
 
 export function SolarSystem() {
   const timeController = useRef(new TimeController())
   const ephemerisProvider = useRef(new SimpleEphemerisProvider())
-  const { isPlaying, timeSpeed, showOrbits, showLabels } = useSimulationStore()
+  const { isPlaying, timeSpeed, showOrbits, showLabels, focusedBody, setSelectedBody, setFocusedBody } = useSimulationStore()
   const [, forceUpdate] = useState({})
+  const { focusOnBody, stopFollowing, updateCameraFollow } = useCameraFocus()
   
   const bodyIds: BodyId[] = ['sun', 'mercury', 'venus', 'earth', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune']
   
@@ -41,6 +43,16 @@ export function SolarSystem() {
       scaleDistance(state.position.y),
     ]
   }
+
+  // Handle camera focus when focusedBody changes
+  useEffect(() => {
+    if (focusedBody) {
+      const position = getRealPosition(focusedBody)
+      focusOnBody(focusedBody, position)
+    } else {
+      stopFollowing()
+    }
+  }, [focusedBody])
   
   useFrame((_, delta) => {
     if (isPlaying) {
@@ -55,12 +67,29 @@ export function SolarSystem() {
       // Force re-render to update positions
       forceUpdate({})
     }
+
+    // Suivi de la planète focalisée (sans redémarrer l'animation)
+    if (focusedBody) {
+      const position = getRealPosition(focusedBody)
+      updateCameraFollow(focusedBody, position)
+    }
   })
   
+  const handleBackgroundClick = () => {
+    setSelectedBody(null)
+    setFocusedBody(null)
+  }
+
   return (
     <>
       <ambientLight intensity={0.1} />
       <pointLight position={[0, 0, 0]} intensity={2} />
+      
+      {/* Background mesh for click detection */}
+      <mesh onClick={handleBackgroundClick}>
+        <sphereGeometry args={[2000, 8, 8]} />
+        <meshBasicMaterial transparent opacity={0} />
+      </mesh>
       
       <Stars
         radius={1000}

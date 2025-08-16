@@ -16,9 +16,13 @@ export function InfoPanel() {
   const body = BODIES[selectedBody]
   
   const formatNumber = (num: number, unit: string) => {
-    if (num >= 1e9) return `${(num / 1e9).toFixed(1)} G${unit}`
-    if (num >= 1e6) return `${(num / 1e6).toFixed(1)} M${unit}`
-    if (num >= 1e3) return `${(num / 1e3).toFixed(1)} k${unit}`
+    // Gérer les unités qui commencent déjà par 'k' (km, kg)
+    const baseUnit = unit.startsWith('k') ? unit.slice(1) : unit
+    const prefix = unit.startsWith('k') ? 'k' : ''
+    
+    if (num >= 1e9) return `${(num / 1e9).toFixed(1)} G${baseUnit}`
+    if (num >= 1e6) return `${(num / 1e6).toFixed(1)} M${baseUnit}`
+    if (num >= 1e3 && !prefix) return `${(num / 1e3).toFixed(1)} k${baseUnit}`
     return `${num.toFixed(1)} ${unit}`
   }
   

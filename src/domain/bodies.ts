@@ -132,7 +132,7 @@ export const BODIES: Record<BodyId, Body> = {
     id: 'uranus',
     name: 'Uranus',
     radiusKm: 25362,
-    massKg: 8.6810e25,
+    massKg: 8.681e25,
     color: '#40E0D0',
     parent: 'sun',
     hasAtmosphere: true,
@@ -170,30 +170,30 @@ export const BODIES: Record<BodyId, Body> = {
 
 export const ORBITAL_ELEMENTS: Record<BodyId, KeplerianElements> = {
   sun: {
-    a: 0,     // UA
-    e: 0,     // excentricité (sans unité)
-    i: 0,     // radians
-    Ω: 0,     // radians
-    ω: 0,     // radians
-    M0: 0,    // radians (anomalie moyenne à l'époque J2000)
+    a: 0, // UA
+    e: 0, // excentricité (sans unité)
+    i: 0, // radians
+    Ω: 0, // radians
+    ω: 0, // radians
+    M0: 0, // radians (anomalie moyenne à l'époque J2000)
     epoch: JULIAN_DAY_J2000, // jour julien (2451545.0)
   },
   mercury: {
-    a: 0.38709927,                     // UA
-    e: 0.20563593,                     // excentricité
-    i: 7.00497902 * DEG_TO_RAD,        // inclinaison en radians
-    Ω: 48.33076593 * DEG_TO_RAD,       // longitude du nœud ascendant (rad)
-    ω: 77.45779628 * DEG_TO_RAD,       // argument du périhélie (rad)
-    M0: 252.25032350 * DEG_TO_RAD,     // anomalie moyenne à J2000 (rad)
+    a: 0.38709927, // UA
+    e: 0.20563593, // excentricité
+    i: 7.00497902 * DEG_TO_RAD, // inclinaison en radians
+    Ω: 48.33076593 * DEG_TO_RAD, // longitude du nœud ascendant (rad)
+    ω: 77.45779628 * DEG_TO_RAD, // argument du périhélie (rad)
+    M0: 252.2503235 * DEG_TO_RAD, // anomalie moyenne à J2000 (rad)
     epoch: JULIAN_DAY_J2000,
   },
   venus: {
-    a: 0.72333566, 
+    a: 0.72333566,
     e: 0.00677672,
     i: 3.39467605 * DEG_TO_RAD,
     Ω: 76.67984255 * DEG_TO_RAD,
     ω: 131.60246718 * DEG_TO_RAD,
-    M0: 181.97909950 * DEG_TO_RAD,
+    M0: 181.9790995 * DEG_TO_RAD,
     epoch: JULIAN_DAY_J2000,
   },
   earth: {
@@ -207,7 +207,7 @@ export const ORBITAL_ELEMENTS: Record<BodyId, KeplerianElements> = {
   },
   mars: {
     a: 1.52371034,
-    e: 0.09339410,
+    e: 0.0933941,
     i: 1.84969142 * DEG_TO_RAD,
     Ω: 49.55953891 * DEG_TO_RAD,
     ω: -23.94362959 * DEG_TO_RAD,
@@ -215,7 +215,7 @@ export const ORBITAL_ELEMENTS: Record<BodyId, KeplerianElements> = {
     epoch: JULIAN_DAY_J2000,
   },
   jupiter: {
-    a: 5.20288700,
+    a: 5.202887,
     e: 0.04838624,
     i: 1.30439695 * DEG_TO_RAD,
     Ω: 100.47390909 * DEG_TO_RAD,
@@ -237,8 +237,8 @@ export const ORBITAL_ELEMENTS: Record<BodyId, KeplerianElements> = {
     e: 0.04725744,
     i: 0.77263783 * DEG_TO_RAD,
     Ω: 74.01692503 * DEG_TO_RAD,
-    ω: 96.99853200 * DEG_TO_RAD,
-    M0: 142.23834050 * DEG_TO_RAD,
+    ω: 96.998532 * DEG_TO_RAD,
+    M0: 142.2383405 * DEG_TO_RAD,
     epoch: JULIAN_DAY_J2000,
   },
   neptune: {
@@ -247,7 +247,7 @@ export const ORBITAL_ELEMENTS: Record<BodyId, KeplerianElements> = {
     i: 1.77004347 * DEG_TO_RAD,
     Ω: 131.78422574 * DEG_TO_RAD,
     ω: 44.96476227 * DEG_TO_RAD,
-    M0: 256.22583450 * DEG_TO_RAD,
+    M0: 256.2258345 * DEG_TO_RAD,
     epoch: JULIAN_DAY_J2000,
   },
 }

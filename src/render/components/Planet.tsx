@@ -6,6 +6,9 @@ import { BodyId } from '../../domain/types.js'
 import { BODIES } from '../../domain/bodies.js'
 import { scaleRadius } from '../../utils/math.js'
 import { useSimulationStore } from '../../state/simulation.js'
+import { PlanetMaterial } from '../materials/PlanetMaterial.js'
+import { Atmosphere } from './Atmosphere.js'
+import { PlanetRings } from './PlanetRings.js'
 
 interface PlanetProps {
   bodyId: BodyId
@@ -16,7 +19,7 @@ export function Planet({ bodyId, position }: PlanetProps) {
   const groupRef = useRef<THREE.Group>(null!)
   const meshRef = useRef<THREE.Mesh>(null!)
   const body = BODIES[bodyId]
-  const { selectedBody, setSelectedBody } = useSimulationStore()
+  const { selectedBody, setSelectedBody, setFocusedBody } = useSimulationStore()
   
   const radius = scaleRadius(body.radiusKm, bodyId === 'sun' ? 5 : 200)
   const isSelected = selectedBody === bodyId
@@ -32,25 +35,24 @@ export function Planet({ bodyId, position }: PlanetProps) {
     }
   })
   
-  const handleClick = () => {
+  const handleClick = (event: any) => {
+    event.stopPropagation()
     setSelectedBody(bodyId)
+    setFocusedBody(bodyId)
   }
   
   return (
     <group ref={groupRef} position={position}>
       <Sphere
         ref={meshRef}
-        args={[radius, 32, 32]}
+        args={[radius, 64, 64]}
         onClick={handleClick}
       >
-        <meshStandardMaterial
-          color={body.color}
-          emissive={bodyId === 'sun' ? body.color : body.color}
-          emissiveIntensity={bodyId === 'sun' ? 0.3 : 0.1}
-          roughness={0.8}
-          metalness={0.1}
-        />
+        <PlanetMaterial bodyId={bodyId} />
       </Sphere>
+      
+      <Atmosphere bodyId={bodyId} radius={radius} />
+      <PlanetRings bodyId={bodyId} radius={radius} />
       
       {isSelected && (
         <Sphere args={[radius * 1.2, 16, 16]}>
