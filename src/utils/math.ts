@@ -12,7 +12,7 @@ export function scaleRadius(radiusKm: number, scaleFactor: number = 100): number
   return Math.max(minSize, scaled)
 }
 
-export function scaleDistance(distanceKm: number, scaleFactor: number = 0.3): number {
+export function scaleDistance(distanceKm: number, scaleFactor: number = 0.1): number {
   return kmToRenderUnits(distanceKm) * scaleFactor
 }
 

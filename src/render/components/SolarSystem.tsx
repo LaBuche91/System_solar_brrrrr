@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import { OrbitControls, Stars } from '@react-three/drei'
 import { Planet } from './Planet'
 import { PlanetLabel } from './PlanetLabel'
+import { OrbitPath } from './OrbitPath'
 import { BodyId } from '../../domain/types.js'
 import { SimpleEphemerisProvider } from '../../ephemeris/kepler.js'
 import { TimeController } from '../../simulation/time.js'
@@ -12,7 +13,7 @@ import { useSimulationStore } from '../../state/simulation.js'
 export function SolarSystem() {
   const timeController = useRef(new TimeController())
   const ephemerisProvider = useRef(new SimpleEphemerisProvider())
-  const { isPlaying, timeSpeed } = useSimulationStore()
+  const { isPlaying, timeSpeed, showOrbits, showLabels } = useSimulationStore()
   const [, forceUpdate] = useState({})
   
   const bodyIds: BodyId[] = ['sun', 'mercury', 'venus', 'earth', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune']
@@ -75,14 +76,17 @@ export function SolarSystem() {
         const position = getRealPosition(bodyId)
         return (
           <group key={bodyId}>
+            {showOrbits && <OrbitPath bodyId={bodyId} />}
             <Planet
               bodyId={bodyId}
               position={position}
             />
-            <PlanetLabel
-              bodyId={bodyId}
-              position={position}
-            />
+            {showLabels && (
+              <PlanetLabel
+                bodyId={bodyId}
+                position={position}
+              />
+            )}
           </group>
         )
       })}
@@ -91,8 +95,9 @@ export function SolarSystem() {
         enablePan={true}
         enableZoom={true}
         enableRotate={true}
-        minDistance={1}
-        maxDistance={1000}
+        minDistance={5}
+        maxDistance={500}
+        target={[0, 0, 0]}
       />
     </>
   )

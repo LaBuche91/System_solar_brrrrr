@@ -16,12 +16,14 @@ export function PlanetLabel({ bodyId, position }: PlanetLabelProps) {
     <Html
       position={[position[0], position[1] + 3, position[2]]}
       center
-      occlude
       style={{
-        color: body.color,
-        fontSize: '12px',
+        color: 'white',
+        fontSize: '14px',
         fontWeight: 'bold',
-        textShadow: '1px 1px 2px black',
+        textShadow: '2px 2px 4px black',
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        padding: '2px 6px',
+        borderRadius: '3px',
         pointerEvents: 'none',
         userSelect: 'none',
       }}

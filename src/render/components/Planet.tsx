@@ -18,7 +18,7 @@ export function Planet({ bodyId, position }: PlanetProps) {
   const body = BODIES[bodyId]
   const { selectedBody, setSelectedBody } = useSimulationStore()
   
-  const radius = scaleRadius(body.radiusKm, bodyId === 'sun' ? 5 : 100)
+  const radius = scaleRadius(body.radiusKm, bodyId === 'sun' ? 5 : 200)
   const isSelected = selectedBody === bodyId
   
   // Update position

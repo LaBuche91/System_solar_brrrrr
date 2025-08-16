@@ -9,6 +9,23 @@ export interface Body {
   hasAtmosphere?: boolean
   parent?: BodyId
   color: string
+  // Propriétés physiques détaillées
+  density?: number // kg/m³
+  gravity?: number // m/s²
+  escapeVelocity?: number // km/s
+  rotationPeriod?: number // heures
+  orbitalPeriod?: number // jours
+  temperature?: {
+    min: number
+    max: number
+    mean: number
+    surface?: number
+    core?: number
+  } // Kelvin
+  atmosphereComposition?: string[]
+  numberOfMoons?: number
+  discoveryYear?: number
+  discoveredBy?: string
 }
 
 export interface KeplerianElements {

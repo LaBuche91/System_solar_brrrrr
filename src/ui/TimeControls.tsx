@@ -2,7 +2,16 @@ import { useState } from 'react'
 import { useSimulationStore } from '../state/simulation.js'
 
 export function TimeControls() {
-  const { isPlaying, timeSpeed, setIsPlaying, setTimeSpeed } = useSimulationStore()
+  const { 
+    isPlaying, 
+    timeSpeed, 
+    showOrbits, 
+    showLabels,
+    setIsPlaying, 
+    setTimeSpeed,
+    setShowOrbits,
+    setShowLabels
+  } = useSimulationStore()
   const [speedInput, setSpeedInput] = useState(timeSpeed.toString())
   
   const handlePlayPause = () => {
@@ -21,7 +30,7 @@ export function TimeControls() {
   
   return (
     <div className="absolute bottom-4 left-4 bg-black bg-opacity-80 text-white p-4 rounded-lg">
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-4 mb-3">
         <button
           onClick={handlePlayPause}
           className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm font-semibold"
@@ -57,6 +66,29 @@ export function TimeControls() {
             </button>
           ))}
         </div>
+      </div>
+      
+      {/* Contrôles d'affichage */}
+      <div className="flex items-center space-x-4 text-sm">
+        <label className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            checked={showOrbits}
+            onChange={(e) => setShowOrbits(e.target.checked)}
+            className="rounded"
+          />
+          <span>Orbites</span>
+        </label>
+        
+        <label className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            checked={showLabels}
+            onChange={(e) => setShowLabels(e.target.checked)}
+            className="rounded"
+          />
+          <span>Noms</span>
+        </label>
       </div>
     </div>
   )
