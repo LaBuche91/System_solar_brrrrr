@@ -9,14 +9,16 @@ import { useSimulationStore } from '../../state/simulation.js'
 import { PlanetMaterial } from '../materials/PlanetMaterial.js'
 import { Atmosphere } from './Atmosphere.js'
 import { PlanetRings } from './PlanetRings.js'
+import { PlanetLabel } from './PlanetLabel.js'
 
 interface PlanetProps {
   bodyId: BodyId
   position: [number, number, number]
   groupRef?: RefObject<THREE.Group | null>
+  showLabel?: boolean
 }
 
-export function Planet({ bodyId, position, groupRef }: PlanetProps) {
+export function Planet({ bodyId, position, groupRef, showLabel }: PlanetProps) {
   const internalGroupRef = useRef<THREE.Group | null>(null)
   const usedGroupRef = (groupRef ?? internalGroupRef) as RefObject<THREE.Group | null>
   const meshRef = useRef<THREE.Mesh>(null!)
@@ -52,6 +54,10 @@ export function Planet({ bodyId, position, groupRef }: PlanetProps) {
       
       <Atmosphere bodyId={bodyId} radius={radius} />
       <PlanetRings bodyId={bodyId} radius={radius} />
+      
+      {showLabel && (
+        <PlanetLabel bodyId={bodyId} position={[0, radius, 0]} />
+      )}
       
       {isSelected && (
         <Sphere args={[radius * 1.2, 16, 16]}>

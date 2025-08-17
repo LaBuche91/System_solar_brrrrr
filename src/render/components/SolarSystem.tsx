@@ -5,7 +5,6 @@ import { OrbitControls } from '@react-three/drei'
 import { Starfield } from './Starfield'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import { Planet } from './Planet'
-import { PlanetLabel } from './PlanetLabel'
 import { OrbitPath } from './OrbitPath'
 import { BodyId } from '../../domain/types.js'
 import { SimpleEphemerisProvider } from '../../ephemeris/kepler.js'
@@ -127,13 +126,8 @@ export function SolarSystem() {
               bodyId={bodyId}
               position={position}
               groupRef={groupRefs[bodyId]}
+              showLabel={showLabels}
             />
-            {showLabels && (
-              <PlanetLabel
-                bodyId={bodyId}
-                position={position}
-              />
-            )}
           </group>
         )
       })}
