@@ -1,6 +1,8 @@
 import { useRef, useEffect, useMemo, createRef, RefObject } from 'react'
+import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
-import { OrbitControls, Stars } from '@react-three/drei'
+import { OrbitControls } from '@react-three/drei'
+import { Starfield } from './Starfield'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import { Planet } from './Planet'
 import { PlanetLabel } from './PlanetLabel'
@@ -102,18 +104,14 @@ export function SolarSystem() {
       
       {/* Background mesh for click detection */}
       <mesh onClick={handleBackgroundClick}>
-        <sphereGeometry args={[2000, 8, 8]} />
-        <meshBasicMaterial transparent opacity={0} />
+        <sphereGeometry args={[6000, 32, 32]} />
+        <meshBasicMaterial transparent opacity={0} depthWrite={false} depthTest={false} side={THREE.BackSide} />
       </mesh>
       
-      <Stars
-        radius={1000}
-        depth={50}
-        count={Math.round(2000 * (typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1))}
-        factor={4}
-        saturation={0}
-        fade
-        speed={1}
+      <Starfield
+        count={Math.round(5000 * (typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1))}
+        radius={4000}
+        size={1.2}
       />
       
       <EffectComposer multisampling={4}>

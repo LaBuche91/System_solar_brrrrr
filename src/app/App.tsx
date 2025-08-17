@@ -10,7 +10,7 @@ function App() {
   return (
     <div className="w-screen h-screen bg-black relative">
       <Canvas
-        camera={{ position: [0, 50, 100], fov: 60 }}
+        camera={{ position: [0, 50, 100], fov: 60, far: 10000 }}
         gl={{ logarithmicDepthBuffer: true }}
       >
         <SolarSystem />
