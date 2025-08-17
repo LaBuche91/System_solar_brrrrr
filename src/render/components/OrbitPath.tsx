@@ -4,6 +4,7 @@ import { Line } from '@react-three/drei'
 import { BodyId } from '../../domain/types.js'
 import { BODIES, ORBITAL_ELEMENTS } from '../../domain/bodies.js'
 import { scaleDistance } from '../../utils/math.js'
+import { useSimulationStore } from '../../state/simulation.js'
 
 interface OrbitPathProps {
   bodyId: BodyId
@@ -13,12 +14,14 @@ interface OrbitPathProps {
 export function OrbitPath({ bodyId, opacity = 0.3 }: OrbitPathProps) {
   const body = BODIES[bodyId]
   const elements = ORBITAL_ELEMENTS[bodyId]
+  const qualityLevel = useSimulationStore(state => state.qualityLevel)
   
   // Ne pas afficher d'orbite pour le soleil
   if (bodyId === 'sun') return null
   
   const points = useMemo(() => {
-    const numPoints = 200
+    const base = qualityLevel === 'low' ? 64 : qualityLevel === 'medium' ? 128 : 256
+    const numPoints = Math.max(32, Math.round(base * (typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1)))
     const points: THREE.Vector3[] = []
     
     // Éléments orbitaux

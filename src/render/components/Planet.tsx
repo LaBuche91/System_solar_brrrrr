@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, type RefObject } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Sphere } from '@react-three/drei'
 import * as THREE from 'three'
@@ -13,21 +13,20 @@ import { PlanetRings } from './PlanetRings.js'
 interface PlanetProps {
   bodyId: BodyId
   position: [number, number, number]
+  groupRef?: RefObject<THREE.Group | null>
 }
 
-export function Planet({ bodyId, position }: PlanetProps) {
-  const groupRef = useRef<THREE.Group>(null!)
+export function Planet({ bodyId, position, groupRef }: PlanetProps) {
+  const internalGroupRef = useRef<THREE.Group | null>(null)
+  const usedGroupRef = (groupRef ?? internalGroupRef) as RefObject<THREE.Group | null>
   const meshRef = useRef<THREE.Mesh>(null!)
   const body = BODIES[bodyId]
   const { selectedBody, setSelectedBody, setFocusedBody } = useSimulationStore()
   
   const radius = scaleRadius(body.radiusKm, bodyId === 'sun' ? 5 : 200)
   const isSelected = selectedBody === bodyId
-  
-  // Update position
-  if (groupRef.current) {
-    groupRef.current.position.set(position[0], position[1], position[2])
-  }
+  const qualityLevel = useSimulationStore(state => state.qualityLevel)
+  const segments = qualityLevel === 'low' ? 16 : qualityLevel === 'medium' ? 32 : 64
   
   useFrame(() => {
     if (meshRef.current) {
@@ -42,10 +41,10 @@ export function Planet({ bodyId, position }: PlanetProps) {
   }
   
   return (
-    <group ref={groupRef} position={position}>
+    <group ref={usedGroupRef} position={position}>
       <Sphere
         ref={meshRef}
-        args={[radius, 64, 64]}
+        args={[radius, segments, segments]}
         onClick={handleClick}
       >
         <PlanetMaterial bodyId={bodyId} />

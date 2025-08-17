@@ -1,6 +1,7 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useEffect, useMemo, createRef, RefObject } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { OrbitControls, Stars } from '@react-three/drei'
+import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import { Planet } from './Planet'
 import { PlanetLabel } from './PlanetLabel'
 import { OrbitPath } from './OrbitPath'
@@ -15,10 +16,18 @@ export function SolarSystem() {
   const timeController = useRef(new TimeController())
   const ephemerisProvider = useRef(new SimpleEphemerisProvider())
   const { isPlaying, timeSpeed, showOrbits, showLabels, focusedBody, setSelectedBody, setFocusedBody } = useSimulationStore()
-  const [, forceUpdate] = useState({})
   const { focusOnBody, stopFollowing, updateCameraFollow } = useCameraFocus()
   
   const bodyIds: BodyId[] = ['sun', 'mercury', 'venus', 'earth', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune']
+  
+  // Refs pour positionner les groupes sans re-render React
+  const groupRefs = useMemo(() => {
+    const m: Record<BodyId, RefObject<THREE.Group | null>> = {} as any
+    bodyIds.forEach(id => {
+      m[id] = createRef<THREE.Group | null>()
+    })
+    return m as Record<BodyId, RefObject<THREE.Group | null>>
+  }, [])
   
   // Initialize time controller
   if (timeController.current.speed !== timeSpeed) {
@@ -64,8 +73,14 @@ export function SolarSystem() {
         console.log('Date:', timeController.current.getCurrentDate().toDateString())
       }
       
-      // Force re-render to update positions
-      forceUpdate({})
+      // Mise à jour impérative des positions des groupes pour éviter des re-renders React fréquents
+      bodyIds.forEach((id) => {
+        const ref = groupRefs[id]
+        if (ref && ref.current) {
+          const pos = getRealPosition(id)
+          ref.current.position.set(pos[0], pos[1], pos[2])
+        }
+      })
     }
 
     // Suivi de la planète focalisée (sans redémarrer l'animation)
@@ -94,12 +109,16 @@ export function SolarSystem() {
       <Stars
         radius={1000}
         depth={50}
-        count={5000}
+        count={Math.round(2000 * (typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1))}
         factor={4}
         saturation={0}
         fade
         speed={1}
       />
+      
+      <EffectComposer multisampling={4}>
+        <Bloom luminanceThreshold={0.8} intensity={0.8} mipmapBlur levels={5} />
+      </EffectComposer>
       
       {bodyIds.map(bodyId => {
         const position = getRealPosition(bodyId)
@@ -109,6 +128,7 @@ export function SolarSystem() {
             <Planet
               bodyId={bodyId}
               position={position}
+              groupRef={groupRefs[bodyId]}
             />
             {showLabels && (
               <PlanetLabel
