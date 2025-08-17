@@ -14,6 +14,7 @@ export interface Body {
   gravity?: number // m/s²
   escapeVelocity?: number // km/s
   rotationPeriod?: number // heures
+  rotationDirection?: number
   orbitalPeriod?: number // jours
   temperature?: {
     min: number

@@ -30,10 +30,23 @@ export function Planet({ bodyId, position, groupRef, showLabel }: PlanetProps) {
   const qualityLevel = useSimulationStore(state => state.qualityLevel)
   const segments = qualityLevel === 'low' ? 16 : qualityLevel === 'medium' ? 32 : 64
   
-  useFrame(() => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += 0.01
-    }
+  const timeSpeed = useSimulationStore(state => state.timeSpeed)
+  const isPlaying = useSimulationStore(state => state.isPlaying)
+
+  useFrame((_, delta) => {
+    if (!meshRef.current) return
+    if (!isPlaying) return
+
+    const periodHours = body.rotationPeriod ?? 24
+    const direction = body.rotationDirection ?? 1
+
+    // Convert real seconds (delta) to rotation fraction:
+    // simulatedSecondsPerRealSecond = timeSpeed * 8640  (because TimeController uses speed * 0.1 days/sec -> 0.1*86400 = 8640)
+    // fraction of rotation per real second = simulatedSecondsPerRealSecond / (periodHours * 3600)
+    // radians this frame = 2π * deltaSeconds * fraction
+    const increment = (Math.PI * 2) * delta * timeSpeed * 2.4 / periodHours
+
+    meshRef.current.rotation.y += direction * increment
   })
   
   const handleClick = (event: any) => {

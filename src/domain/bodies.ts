@@ -45,6 +45,7 @@ export const BODIES: Record<BodyId, Body> = {
     gravity: 8.87,
     escapeVelocity: 10.36,
     rotationPeriod: 5832.5, // heures (~243 jours, rétrograde)
+    rotationDirection: -1,
     orbitalPeriod: 225, // jours
     temperature: { min: 737, max: 737, mean: 737 }, // K
     atmosphereComposition: ['CO₂ (96%)', 'N₂ (3.5%)', 'SO₂, H₂O'],
@@ -140,6 +141,7 @@ export const BODIES: Record<BodyId, Body> = {
     gravity: 8.69,
     escapeVelocity: 21.3,
     rotationPeriod: 17.2, // heures (rotation rétrograde)
+    rotationDirection: -1,
     orbitalPeriod: 30687, // jours
     temperature: { min: 76, max: 76, mean: 76 }, // K
     atmosphereComposition: ['H₂ (83%)', 'He (15%)', 'CH₄ (2%)'],
